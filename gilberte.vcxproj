@@ -18,6 +18,16 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\gilberte.h" />
+    <ClInclude Include="src\render.h" />
+    <ClInclude Include="src\vec3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\gilberte.c" />
+    <ClCompile Include="src\render.c" />
+    <ClCompile Include="src\vec3.c" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -189,16 +199,6 @@
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="render.c" />
-    <ClCompile Include="gilberte.c" />
-    <ClCompile Include="vec3.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="render.h" />
-    <ClInclude Include="gilberte.h" />
-    <ClInclude Include="vec3.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
