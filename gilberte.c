@@ -47,12 +47,15 @@ int main(int argc, char** argv)
 
     while (true)
     {
-        SDL_Event event;
-        while (SDL_PollEvent(&event) != 0)
+        /* Input processing. */
         {
-            if (event.type == SDL_QUIT)
+            SDL_Event event;
+            while (SDL_PollEvent(&event) != 0)
             {
-                goto Exit;
+                if (event.type == SDL_QUIT)
+                {
+                    goto Exit;
+                }
             }
         }
 
@@ -75,6 +78,9 @@ int main(int argc, char** argv)
 
             SDL_UpdateWindowSurface(window);
         }
+
+        
+        SDL_Delay(1.0 / TARGET_FRAME_RATE * 1000);
     }
 
 Exit:
