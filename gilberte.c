@@ -1,266 +1,194 @@
-#include "gilberte.h"
+#include <SDL.h>
 
-#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
-#include <Windows.h>
+#define WINDOW_WIDTH	640
+#define WINDOW_HEIGHT	480
 
-BOOL gGameIsRunning = TRUE;
-HWND gGameWindow    = NULL;
+typedef struct {
+	double x, y, z;
+} Vec3;
 
-FRAMEBUFFER gFrameBuffer = { 0 };
-UINT32 gPixels[GAME_RESOLUTION_WIDTH * GAME_RESOLUTION_HEIGHT] = { 0 };
+typedef enum {
+	kErrorInitialization
+} ErrorCode;
 
-MONITORINFO gMonitorInfo = { sizeof(gMonitorInfo) };
-LONG gMonitorWidth  = 0;
-LONG gMonitorHeight = 0;
+bool SolveQuadratic(const double a, const double b, const double c, double *x0, double *x1);
+Vec3 Normalize(Vec3* vec);
+double GetVec3Length(Vec3* vec);
+double DotProduct(Vec3* a, Vec3* b);
+Vec3 Mult(Vec3* vec, double k);
+Vec3 Sub(Vec3* a, Vec3* b);
 
-/* X and Y in terms of window client area. */
-INT gRenderDestX, gRenderDestY = 0;
-
-INT WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR pCmdLine, _In_ INT nCmdShow)
+int main(int argc, char** argv)
 {
-    UNREFERENCED_PARAMETER(hInstance);
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(pCmdLine);
-    UNREFERENCED_PARAMETER(nCmdShow);
+	int exit_code = 0;
 
-    if (GameIsAlreadyRunning() == TRUE)
-    {
-        MessageBox(NULL, L"Another instance of this program is already running!", L"Error!", MB_ICONERROR | MB_OK);
-        return 1;
-    }
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+	{
+		SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Error initializing SDL: %s\n", SDL_GetError());
+		exit_code = kErrorInitialization;
+		goto Exit;
+	}
 
-    if (CreateGameWindow() != ERROR_SUCCESS)
-    {
-        MessageBox(NULL, L"Error occured while creating window!", L"Error!", MB_ICONERROR | MB_OK);
-        return 2;
-    }
+	SDL_Window* window = SDL_CreateWindow("Gilberte", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+	if (window == NULL)
+	{
+		SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Error creating window: %s\n", SDL_GetError());
+		exit_code = kErrorInitialization;
+		goto Exit;
+	}
 
-    // At this point window has been successfully created so we may initialize frame buffer.
-    gFrameBuffer.bitmap_info.bmiHeader.biSize           = sizeof(gFrameBuffer.bitmap_info.bmiHeader);
-    gFrameBuffer.bitmap_info.bmiHeader.biWidth          = GAME_RESOLUTION_WIDTH;
-    gFrameBuffer.bitmap_info.bmiHeader.biHeight         = GAME_RESOLUTION_HEIGHT;
-    gFrameBuffer.bitmap_info.bmiHeader.biBitCount       = GAME_BITS_PER_PIXEL;
-    gFrameBuffer.bitmap_info.bmiHeader.biCompression    = BI_RGB;
-    gFrameBuffer.bitmap_info.bmiHeader.biPlanes         = 1; // Must be set to 1 according to MSDN.
-    gFrameBuffer.buffer                                 = &gPixels;
+	/*
+	* Surface is a plane we draw on.
+	* See https://wiki.libsdl.org/SDL2/SDL_Surface
+	*/
+	SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormat(0, WINDOW_WIDTH, WINDOW_HEIGHT, 32, SDL_PIXELFORMAT_RGBA32);
+	if (surface == NULL)
+	{
+		SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Error creating surface: %s\n", SDL_GetError());
+		exit_code = kErrorInitialization;
+		goto Exit;
+	}
 
-    memset(gFrameBuffer.buffer, 0x00, FRAME_BUFFER_BYTES);
-    memset(gFrameBuffer.buffer, 0xFF, 4);
+	while (true)
+	{
+		// Input processing
+		{
+			SDL_Event event;
 
-    while (gGameIsRunning == TRUE)
-    {
-        MSG message = { 0 };
+			while (SDL_PollEvent(&event) != 0)
+			{
+				if (event.type == SDL_QUIT)
+				{
+					goto Exit;
+				}
+			}
+		}	
 
-        while (PeekMessage(&message, gGameWindow, 0, 0, PM_REMOVE))
-        {
-            DispatchMessage(&message);
-        }
+		// Scene rendering
+		{
+			SDL_LockSurface(surface);
 
-        RenderFrame();
-    }
+			// Draw background color
+			for (int i = 0; i < surface->w * surface->h; ++i)
+			{
+				Uint32 *pixel = (Uint32*)surface->pixels + i;
+				*pixel = SDL_MapRGBA(surface->format, 255, 0, 100, 255);
+			}
 
-    return 0;
-}
+			// Draw sphere
+			// Sphere's origin is at (0, 4, 0) (assuming (x, y, z) ordering) and has a radius of 1
+			Vec3 sphere = { .x = 0, .y = 0, .z = 4 };
+			double radius = 1;
 
-LRESULT CALLBACK WindowProc(_In_ HWND hWindow, _In_ UINT uMessage, _In_ WPARAM wParameter, _In_ LPARAM lParameter)
-{
-    switch (uMessage)
-    {
-        case WM_KEYDOWN:
-        {
-            if (wParameter == VK_ESCAPE)
-            {
-                SetFullscreen(FALSE);
-            }
-            else if (wParameter == 0x46) // See MSDN on Virtual-Key Codes.
-            {
-                SetFullscreen(TRUE);
-            }
-            return 0;
-        }
+			Vec3 origin = { 0, 0, 0 };
 
-        case WM_SIZE:
-        {
-            if (wParameter == SIZE_MAXIMIZED)
-            {
-                SetFullscreen(TRUE);
-            }
-            return 0;
-        }
+			for (int i = 0; i < surface->h; ++i) // y
+			{
+				for (int j = 0; j < surface->w; ++j) // x
+				{
+					Vec3 ray = { .x = ((double)j / WINDOW_WIDTH * 2 - 1) * WINDOW_WIDTH / WINDOW_HEIGHT,
+								 .y = (double)i / WINDOW_HEIGHT * 2 - 1,
+								 .z = 1.0};
 
-        case WM_CLOSE:
-        {
-            gGameIsRunning = FALSE;
-            return 0;
-        }
-    }
+					Vec3 ray_normalized = Normalize(&ray);
 
-    return DefWindowProc(hWindow, uMessage, wParameter, lParameter);
-}
+					double a = 1;
 
-DWORD CreateGameWindow(VOID)
-{
-    DWORD result = ERROR_SUCCESS;
+					Vec3 b_temp_0 = Mult(&ray_normalized, 2);
+					Vec3 b_temp_1 = Sub(&origin, &sphere);
+					double b = DotProduct(&b_temp_0, &b_temp_1);
 
-    LPCWSTR CLASS_NAME = L"Gilberte Class";
+					double c = DotProduct(&b_temp_1, &b_temp_1) - radius * radius;
 
-    // TODO: Check for return values
-    WNDCLASSEX window_class     = { 0 };
-    window_class.cbSize         = sizeof(window_class);
-    window_class.lpfnWndProc    = WindowProc;
-    window_class.hInstance      = GetModuleHandle(NULL);
-    window_class.lpszClassName  = CLASS_NAME;
-    window_class.hbrBackground  = CreateSolidBrush(RGB(255, 0, 255));
-    window_class.hIcon          = LoadIcon(NULL, IDI_APPLICATION);
-    window_class.hIconSm        = LoadIcon(NULL, IDI_APPLICATION);
-    window_class.hCursor        = LoadCursor(NULL, IDC_ARROW);
+					double x0, x1;
 
-    if (RegisterClassEx(&window_class) == 0)
-    {
-        result = GetLastError();
-        goto Exit;
-    }
+					if (SolveQuadratic(a, b, c, &x0, &x1) == true)
+					{
+						Uint32* pixel = (Uint32*)surface->pixels + i * WINDOW_WIDTH + j;
+						*pixel = SDL_MapRGBA(surface->format, 128, 128, 128, 255);
+					}
+				}
+			}
 
-    if (GetMonitorInfo(MonitorFromWindow(gGameWindow, MONITOR_DEFAULTTOPRIMARY), &gMonitorInfo) == 0)
-    {
-        result = ERROR_MONITOR_NO_DESCRIPTOR;
-        goto Exit;
-    }
+			SDL_UnlockSurface(surface);
 
-    gGameWindow = CreateWindowEx(
-        0,
-        CLASS_NAME,
-        GAME_NAME,
-        (WS_OVERLAPPEDWINDOW | WS_VISIBLE) ^ WS_THICKFRAME,
-        gMonitorInfo.rcMonitor.left, gMonitorInfo.rcMonitor.right,
-        CW_USEDEFAULT, CW_USEDEFAULT,
-        NULL,
-        NULL,
-        window_class.hInstance,
-        NULL);
+			SDL_BlitSurface(surface, NULL, SDL_GetWindowSurface(window), NULL);
 
-    if (gGameWindow == NULL)
-    {
-        result = GetLastError();
-        goto Exit;
-    }
-
-    SetFullscreen(FALSE);
+			SDL_UpdateWindowSurface(window);
+		
+		}
+	}
 
 Exit:
-    return result;
+	SDL_Quit();
+
+	SDL_Log("Exit with code: [ %d ]\n", exit_code);
+
+	return exit_code;
 }
 
-DWORD SetFullscreen(BOOL set_fullscreen)
+bool SolveQuadratic(const double a, const double b, const double c, double *x0, double *x1)
 {
-    DWORD result = ERROR_SUCCESS;
+	double discr = b * b - 4 * a * c;
 
-    if (set_fullscreen == TRUE)
-    {
-        if (SetWindowLongPtr(gGameWindow, GWL_STYLE, WS_VISIBLE) == 0)
-        {
-            result = GetLastError();
-            goto Exit;
-        }
+	if (discr < 0)
+	{
+		return false;
+	}
+	else if (discr == 0)
+	{
+		*x0 = *x1 = -0.5 * b / a;
+	}
+	else
+	{
+		double q = (b > 0) ?
+			-0.5 * (b + sqrt(discr)) :
+			-0.5 * (b - sqrt(discr));
+		*x0 = q / a;
+		*x1 = c / q;
+	}
 
-        if (GetMonitorInfo(MonitorFromWindow(gGameWindow, MONITOR_DEFAULTTOPRIMARY), &gMonitorInfo) == 0)
-        {
-            result = ERROR_MONITOR_NO_DESCRIPTOR;
-            goto Exit;
-        }
+	if (x0 > x1)
+	{
+		double temp = *x0;
+		*x0 = *x1;
+		*x1 = temp;
+	}
 
-        gMonitorWidth = gMonitorInfo.rcMonitor.right - gMonitorInfo.rcMonitor.left;
-        gMonitorHeight = gMonitorInfo.rcMonitor.bottom - gMonitorInfo.rcMonitor.top;
-
-        if (SetWindowPos(gGameWindow, HWND_TOP,
-            gMonitorInfo.rcMonitor.left, gMonitorInfo.rcMonitor.top,
-            gMonitorWidth, gMonitorHeight,
-            SWP_FRAMECHANGED | SWP_NOCOPYBITS) == 0)
-        {
-            result = GetLastError();
-            goto Exit;
-        }
-
-        gRenderDestX = (gMonitorWidth / 2) - (GAME_RESOLUTION_WIDTH / 2);
-        gRenderDestY = (gMonitorHeight / 2) - (GAME_RESOLUTION_HEIGHT / 2);
-    }
-    else
-    {
-        if (SetWindowLongPtr(gGameWindow, GWL_STYLE, (WS_OVERLAPPEDWINDOW | WS_VISIBLE) ^ WS_THICKFRAME) == 0)
-        {
-            result = GetLastError();
-            goto Exit;
-        }
-
-        if (GetMonitorInfo(MonitorFromWindow(gGameWindow, MONITOR_DEFAULTTOPRIMARY), &gMonitorInfo) == 0)
-        {
-            result = ERROR_MONITOR_NO_DESCRIPTOR;
-            goto Exit;
-        }
-
-        gMonitorWidth = gMonitorInfo.rcMonitor.right - gMonitorInfo.rcMonitor.left;
-        gMonitorHeight = gMonitorInfo.rcMonitor.bottom - gMonitorInfo.rcMonitor.top;
-
-        RECT client_area_rect = { 0 };
-        client_area_rect.right = 640;
-        client_area_rect.bottom = 480;
-
-        if (AdjustWindowRect(&client_area_rect, WS_OVERLAPPEDWINDOW | WS_VISIBLE, FALSE) == 0)
-        {
-            result = GetLastError();
-            goto Exit;
-        }
-
-        if (SetWindowPos(gGameWindow, HWND_TOP,
-            gMonitorInfo.rcMonitor.left, gMonitorInfo.rcMonitor.top,
-            client_area_rect.right - client_area_rect.left, client_area_rect.bottom - client_area_rect.top,
-            SWP_FRAMECHANGED | SWP_NOCOPYBITS) == 0)
-        {
-            result = GetLastError();
-            goto Exit;
-        }
-
-        gRenderDestX = 0;
-        gRenderDestY = 0;
-    }
-
-Exit:
-    return result;
+	return true;
 }
 
-BOOL GameIsAlreadyRunning(VOID)
+Vec3 Normalize(Vec3* vec)
 {
-    if (CreateMutex(NULL, FALSE, GAME_NAME L"_Mutex") == NULL)
-    {
-        DWORD dwError = GetLastError();
-        if (dwError == ERROR_ALREADY_EXISTS)
-        {
-            return TRUE;
-        }
-        else
-        {
-            // TODO: Handle errors other than ERROR_ALREADY_EXISTS
-        }
-    }
+	const double kLength = GetVec3Length(vec);
+	Vec3 normalized = { .x = vec->x / kLength, .y = vec->y / kLength, .z = vec->z / kLength };
 
-    return FALSE;
+	return normalized;
 }
 
-VOID RenderFrame(VOID)
+double GetVec3Length(Vec3 *vec)
 {
-    HDC device_context = GetDC(gGameWindow);
+	return SDL_sqrt(vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
+}
 
-    StretchDIBits(
-        device_context,
-        gRenderDestX, gRenderDestY,
-        GAME_RESOLUTION_WIDTH, GAME_RESOLUTION_HEIGHT,
-        0, 0,
-        GAME_RESOLUTION_WIDTH, GAME_RESOLUTION_HEIGHT,
-        gFrameBuffer.buffer,
-        &gFrameBuffer.bitmap_info,
-        DIB_RGB_COLORS,
-        SRCCOPY);
+double DotProduct(Vec3* a, Vec3* b)
+{
+	return a->x * b->x + a->y * b->y + a->z * b->z;
+}
 
-    ReleaseDC(gGameWindow, device_context);
+Vec3 Mult(Vec3* vec, double k)
+{
+	Vec3 vec_ret = { .x = vec->x * k, .y = vec->y * k, .z = vec->z * k };
+
+	return vec_ret;
+}
+
+Vec3 Sub(Vec3* a, Vec3* b)
+{
+	Vec3 vec_ret = { .x = a->x - b->x, .y = a->y - b->y, .z = a->z - b->z };
+
+	return vec_ret;
 }
