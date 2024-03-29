@@ -2,7 +2,6 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include <time.h>
 
 #include <SDL.h>
 
@@ -64,7 +63,7 @@ int main(int argc, char** argv)
         {
             SDL_LockSurface(surface);
 
-            const time_t kBegin = time(NULL);
+            const Uint64 kBegin = SDL_GetTicks64();
 
             /* Fill background. */
             for (int y = 0; y < WINDOW_HEIGHT; ++y)
@@ -76,7 +75,7 @@ int main(int argc, char** argv)
                 }
             }
 
-            SDL_Log("Scene render time: %f seconds\n", difftime(time(NULL), kBegin));
+            SDL_Log("Scene render time: %llu milliseconds\n", SDL_GetTicks64() - kBegin);
 
             SDL_UnlockSurface(surface);
 
