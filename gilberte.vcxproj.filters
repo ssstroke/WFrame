@@ -15,24 +15,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="gilberte.c">
+    <ClCompile Include="src\gilberte.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vec3.c">
+    <ClCompile Include="src\render.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="render.c">
+    <ClCompile Include="src\vec3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gilberte.h">
+    <ClInclude Include="src\gilberte.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vec3.h">
+    <ClInclude Include="src\render.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="render.h">
+    <ClInclude Include="src\vec3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
