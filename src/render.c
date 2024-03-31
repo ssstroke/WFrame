@@ -96,6 +96,15 @@ void DrawLine(void* buffer,
     }
 }
 
+void DrawTriangleWireframe(void* buffer,
+                           const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
+                           const int r, const int g, const int b)
+{
+    DrawLine(buffer, p0, p1, r, g, b);
+    DrawLine(buffer, p1, p2, r, g, b);
+    DrawLine(buffer, p2, p0, r, g, b);
+}
+
 void Interpolate(const int i0, const int d0, const int i1, const int d1)
 {
     if (i0 == i1)

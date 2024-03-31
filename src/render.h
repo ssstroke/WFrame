@@ -14,8 +14,12 @@ void DrawPoint(void* buffer,
                const int r, const int g, const int b);
 
 /*
-TODO
+Draw points of specified color between `p0` and `p1`.
 */
 void DrawLine(void* buffer,
               const Vec2Int* p0, const Vec2Int* p1,
               const int r, const int g, const int b);
+
+void DrawTriangleWireframe(void* buffer,
+                           const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
+                           const int r, const int g, const int b);

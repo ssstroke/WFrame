@@ -75,17 +75,13 @@ int main(int argc, char** argv)
                 }
             }
 
-            const Vec2Int p0 = { .x = WINDOW_WIDTH / 2, .y = WINDOW_HEIGHT / 2 };
-            const Vec2Int p1 = { .x = WINDOW_WIDTH / 2 - 32, .y = WINDOW_HEIGHT - 32 };
-            DrawLine(surface->pixels, &p0, &p1, COLOR_FOREGROUND);
-
-            const Vec2Int p2 = { .x = WINDOW_WIDTH / 3, .y = WINDOW_HEIGHT / 4 };
-            const Vec2Int p3 = { .x = WINDOW_WIDTH / 2 + 32, .y = WINDOW_HEIGHT - 64 };
-            DrawLine(surface->pixels, &p2, &p3, COLOR_FOREGROUND);
-
-            const double FOV = M_PI / 3.0;
-            const double zFar = 1.0;
-            const double zNear = 100.0;
+            const Vec2Int a = { .x = 32,
+                                .y = 32 };
+            const Vec2Int b = { .x = WINDOW_WIDTH - 32,
+                                .y = WINDOW_HEIGHT - 32 };
+            const Vec2Int c = { .x = 69,
+                                .y = 420 };
+            DrawTriangleWireframe(surface->pixels, &a, &b, &c, COLOR_FOREGROUND);
 
             SDL_Log("Scene render time: %llu milliseconds\n",
                     SDL_GetTicks64() - kBegin);
