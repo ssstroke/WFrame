@@ -12,6 +12,12 @@ Vec3 Vec3Add(const Vec3*, const Vec3*);
 /* (a, b, c) - (d, e, f) = (a - d, b - e, c - f) */
 Vec3 Vec3Sub(const Vec3*, const Vec3*);
 
+/* (a, b, c) + k = (a + k, b + k, c + k) */
+Vec3 Vec3AddScalar(const Vec3*, double);
+
+/* (a, b, c) - k = (a - k, b - k, c - k) */
+Vec3 Vec3SubScalar(const Vec3*, double);
+
 /* (a, b, c) * k = (ka, kb, kc) */
 Vec3 Vec3MulScalar(const Vec3*, double);
 

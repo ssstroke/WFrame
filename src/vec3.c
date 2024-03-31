@@ -20,6 +20,24 @@ Vec3 Vec3Sub(const Vec3* a, const Vec3* b)
     return kResult;
 }
 
+/* (a, b, c) + k = (a + k, b + k, c + k) */
+Vec3 Vec3AddScalar(const Vec3* a, double k)
+{
+    const Vec3 kResult = { .x = a->x + k,
+                           .y = a->y + k,
+                           .z = a->z + k };
+    return kResult;
+}
+
+/* (a, b, c) - k = (a - k, b - k, c - k) */
+Vec3 Vec3SubScalar(const Vec3* a, double k)
+{
+    const Vec3 kResult = { .x = a->x - k,
+                           .y = a->y - k,
+                           .z = a->z - k };
+    return kResult;
+}
+
 /* (a, b, c) * k = (ka, kb, kc) */
 Vec3 Vec3MulScalar(const Vec3* a, double k)
 {
