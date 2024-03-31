@@ -6,7 +6,7 @@
 #include <SDL.h>
 
 #include "render.h"
-#include "vec3.h"
+#include "vec.h"
 
 int main(int argc, char** argv)
 {
@@ -70,9 +70,18 @@ int main(int argc, char** argv)
             {
                 for (int x = 0; x < WINDOW_WIDTH; ++x)
                 {
-                    WriteColor(surface->pixels, x, y, 255, 10, 100);
+                    const Vec2Int p = { .x = x, .y = y };
+                    DrawPoint(surface->pixels, &p, COLOR_BACKGROUND);
                 }
             }
+
+            const Vec2Int p0 = { .x = WINDOW_WIDTH / 2, .y = WINDOW_HEIGHT / 2 };
+            const Vec2Int p1 = { .x = WINDOW_WIDTH / 2 - 32, .y = WINDOW_HEIGHT - 32 };
+            DrawLine(surface->pixels, &p0, &p1, COLOR_FOREGROUND);
+
+            const Vec2Int p2 = { .x = WINDOW_WIDTH / 3, .y = WINDOW_HEIGHT / 4 };
+            const Vec2Int p3 = { .x = WINDOW_WIDTH / 2 + 32, .y = WINDOW_HEIGHT - 64 };
+            DrawLine(surface->pixels, &p2, &p3, COLOR_FOREGROUND);
 
             const double FOV = M_PI / 3.0;
             const double zFar = 1.0;

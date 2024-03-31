@@ -4,6 +4,9 @@
 #define WINDOW_HEIGHT       480
 #define TARGET_FRAME_RATE   24  // 24 feels so much better when I listen to this: https://youtu.be/mPYBnlMafS0
 
+#define COLOR_BACKGROUND 216,  10, 100
+#define COLOR_FOREGROUND 218, 247, 166
+
 typedef enum {
     kErrorOk,
     kErrorInitialization

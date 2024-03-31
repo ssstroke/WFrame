@@ -42,3 +42,8 @@ Vec3 Vec3CrossProduct(const Vec3*, const Vec3*);
 
 /* ( x / length(vec), y / length(vec), z / length(vec) ) */
 Vec3 Vec3Normalize(const Vec3*);
+
+typedef struct {
+    int x;
+    int y;
+} Vec2Int;
