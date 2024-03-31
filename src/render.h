@@ -2,8 +2,6 @@
 
 #include "vec.h"
 
-// TODO: Why pass buffer if there is only one buffer?
-
 /*
 Write RGB color to (x, y) coordinate of imaginary plane of
 32-bit pixels that the `buffer` points to.
@@ -20,6 +18,15 @@ void DrawLine(void* buffer,
               const Vec2Int* p0, const Vec2Int* p1,
               const int r, const int g, const int b);
 
+/*
+Draw the outline of the triangle specified by 3 points.
+Internally this functions just calls `DrawLine()`
+3 times for each side of the triangle.
+*/
 void DrawTriangleWireframe(void* buffer,
                            const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
                            const int r, const int g, const int b);
+
+void DrawTriangleFilled(void* buffer,
+                        const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
+                        const int r, const int g, const int b);

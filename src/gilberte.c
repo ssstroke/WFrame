@@ -76,12 +76,14 @@ int main(int argc, char** argv)
             }
 
             const Vec2Int a = { .x = 32,
-                                .y = 32 };
-            const Vec2Int b = { .x = WINDOW_WIDTH - 32,
-                                .y = WINDOW_HEIGHT - 32 };
-            const Vec2Int c = { .x = 69,
                                 .y = 420 };
-            DrawTriangleWireframe(surface->pixels, &a, &b, &c, COLOR_FOREGROUND);
+            const Vec2Int b = { .x = 256,
+                                .y = 16 };
+            const Vec2Int c = { .x = 500,
+                                .y = 150 };
+
+            DrawTriangleFilled(surface->pixels, &a, &b, &c, COLOR_FOREGROUND);
+            DrawTriangleWireframe(surface->pixels, &a, &b, &c, 0, 0, 0);
 
             SDL_Log("Scene render time: %llu milliseconds\n",
                     SDL_GetTicks64() - kBegin);
