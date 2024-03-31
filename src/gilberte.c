@@ -65,6 +65,12 @@ int main(int argc, char** argv)
         goto Exit;
     }
 
+    Vec3 triangle[] = {
+                {.x = 0.0, .y = 0.0, .z = 3.0 },
+                {.x = -2.0, .y = 1.0, .z = 5.0 },
+                {.x = 1.0, .y = 0.0, .z = 3.0 },
+    };
+
     while (true)
     {
         /* Input processing. */
@@ -85,11 +91,16 @@ int main(int argc, char** argv)
 
             const Uint64 kBegin = SDL_GetTicks64();
 
-            Vec3 triangle[] = {
-                { .x =  0.0, .y = 0.0, .z = 3.0 },
-                { .x = -2.0, .y = 1.0, .z = 5.0 },
-                { .x =  1.0, .y = 0.0, .z = 3.0 },
-            };
+            /* Draw background. */
+            for (int i = 0; i < WINDOW_HEIGHT; ++i)
+            {
+                for (int j = 0; j < WINDOW_WIDTH; ++j)
+                {
+                    WriteColor(surface->pixels, j, i, 255, 10, 100);
+                }
+            }
+
+            // triangle[0].y += 0.001;
 
             const double FOV = M_PI / 3.0;
             const double zFar = 1.0;
