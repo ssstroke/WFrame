@@ -3,15 +3,12 @@
 
 #include "render.h"
 
-#include <stdbool.h>
-#include <stdint.h>
-
 #include <SDL.h>
 
 #include "gilberte.h"
 
-void Interpolate(const int i0, const int d0, const int i1, const int d1,
-                 int* values);
+void Lerp(const int i0, const int d0, const int i1, const int d1,
+          int* values);
 
 void DrawPoint(void* buffer,
                const Vec2Int* p,
@@ -35,7 +32,7 @@ void DrawPoint(void* buffer,
     * `WINDOW_WIDTH` is defined in `gilberte.h` in order to avoid passing
     * one extra parameter to a function that will never change.
     */
-    uint32_t* pixel = (uint32_t*)buffer + p->y * WINDOW_WIDTH + p->x;
+    Uint32* pixel = (Uint32*)buffer + p->y * WINDOW_WIDTH + p->x;
 
     /* There is `SDL_MapRGBA` for this but I would like to reinvent the wheel ;) */
     if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
@@ -75,7 +72,7 @@ void DrawLine(void* buffer,
 
         int values[WINDOW_WIDTH];
 
-        Interpolate(p0_->x, p0_->y, p1_->x, p1_->y, values);
+        Lerp(p0_->x, p0_->y, p1_->x, p1_->y, values);
         for (int x = p0_->x; x <= p1_->x; ++x)
         {
             const Vec2Int p = { .x = x, .y = values[x - p0_->x] };
@@ -94,7 +91,7 @@ void DrawLine(void* buffer,
 
         int values[WINDOW_HEIGHT];
 
-        Interpolate(p0_->y, p0_->x, p1_->y, p1_->x, values);
+        Lerp(p0_->y, p0_->x, p1_->y, p1_->x, values);
         for (int y = p0_->y; y <= p1_->y; ++y)
         {
             const Vec2Int p = { .x = values[y - p0_->y], .y = y };
@@ -112,9 +109,9 @@ void DrawTriangleWireframe(void* buffer,
     DrawLine(buffer, p2, p0, r, g, b);
 }
 
-void DrawTriangleFilled(void* buffer,
-                        const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
-                        const int r, const int g, const int b)
+void DrawTriangleSolid(void* buffer,
+                       const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
+                       const int r, const int g, const int b)
 {
     Vec2Int* p0_ = p0;
     Vec2Int* p1_ = p1;
@@ -148,9 +145,9 @@ void DrawTriangleFilled(void* buffer,
         int x02[WINDOW_WIDTH]; // it is the "tall" side
 
         // p1_->y - 1 (i.e. the last point) becase this last point will be x12's first point
-        Interpolate(p0_->y, p0_->x, p1_->y, p1_->x, x012);
-        Interpolate(p1_->y, p1_->x, p2_->y, p2_->x, x012 + (p1_->y - p0_->y));
-        Interpolate(p0_->y, p0_->x, p2_->y, p2_->x, x02);
+        Lerp(p0_->y, p0_->x, p1_->y, p1_->x, x012);
+        Lerp(p1_->y, p1_->x, p2_->y, p2_->x, x012 + (p1_->y - p0_->y));
+        Lerp(p0_->y, p0_->x, p2_->y, p2_->x, x02);
 
         int* x_left;
         int* x_right;
@@ -181,8 +178,8 @@ void DrawTriangleFilled(void* buffer,
 // `i` stands for independent
 // `d` stands for   dependent
 // we compute d = f(i)
-void Interpolate(const int i0, const int d0, const int i1, const int d1,
-                 int* values)
+void Lerp(const int i0, const int d0, const int i1, const int d1,
+          int* values)
 {
     if (i0 == i1)
     {

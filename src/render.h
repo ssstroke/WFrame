@@ -27,6 +27,6 @@ void DrawTriangleWireframe(void* buffer,
                            const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
                            const int r, const int g, const int b);
 
-void DrawTriangleFilled(void* buffer,
-                        const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
-                        const int r, const int g, const int b);
+void DrawTriangleSolid(void* buffer,
+                       const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
+                       const int r, const int g, const int b);

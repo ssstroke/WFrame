@@ -82,7 +82,7 @@ int main(int argc, char** argv)
             const Vec2Int c = { .x = 500,
                                 .y = 150 };
 
-            DrawTriangleFilled(surface->pixels, &a, &b, &c, COLOR_FOREGROUND);
+            DrawTriangleSolid(surface->pixels, &a, &b, &c, COLOR_FOREGROUND);
             DrawTriangleWireframe(surface->pixels, &a, &b, &c, 0, 0, 0);
 
             SDL_Log("Scene render time: %llu milliseconds\n",
