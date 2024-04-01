@@ -75,15 +75,32 @@ int main(int argc, char** argv)
                 }
             }
 
-            const Vec2Int a = { .x = 32,
-                                .y = 420 };
-            const Vec2Int b = { .x = 256,
-                                .y = 16 };
-            const Vec2Int c = { .x = 500,
-                                .y = 150 };
+            const Vec2Int triangles[][3] =
+            {
+                {
+                    { .x = 32,  .y = 420 },
+                    { .x = 256, .y = 16  },
+                    { .x = 480, .y = 150 },
+                },
+                {
+                    { .x = 500, .y = 420 },
+                    { .x = 550, .y = 32  },
+                    { .x = 500, .y = 64  },
+                }
+            };
 
-            DrawTriangleSolid(surface->pixels, &a, &b, &c, COLOR_FOREGROUND);
-            DrawTriangleWireframe(surface->pixels, &a, &b, &c, 0, 0, 0);
+            for (size_t i = 0; i < (sizeof(triangles) / sizeof(triangles[0])); ++i)
+            {
+                /*DrawTriangleSolid(surface->pixels,
+                    &(triangles[i][0]), &(triangles[i][1]), &(triangles[i][2]),
+                    COLOR_FOREGROUND);*/
+                DrawTriangleShaded(surface->pixels,
+                    &(triangles[i][0]), &(triangles[i][1]), &(triangles[i][2]),
+                    0.0, 1.0, 0.5, COLOR_FOREGROUND);
+                DrawTriangleWireframe(surface->pixels,
+                    &(triangles[i][0]), &(triangles[i][1]), &(triangles[i][2]),
+                    COLOR_WHITE);
+            }
 
             SDL_Log("Scene render time: %llu milliseconds\n",
                     SDL_GetTicks64() - kBegin);
