@@ -2,7 +2,12 @@
 
 #define WINDOW_WIDTH        640
 #define WINDOW_HEIGHT       480
+
 #define TARGET_FRAME_RATE   24  // 24 feels so much better when I listen to this: https://youtu.be/mPYBnlMafS0
+
+#define VIEWPORT_WIDTH      1
+#define VIEWPORT_HEIGHT     1
+#define VIEWPORT_LENGTH     1
 
 #define COLOR_BLACK         0, 0, 0
 #define COLOR_WHITE         255, 255, 255
