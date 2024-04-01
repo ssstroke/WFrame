@@ -76,101 +76,101 @@ int main(int argc, char** argv)
             }
 
             /* Draw triangles. */
-            {
-                const Vec2Int triangles[][3] =
-                {
-                    {
-                        {.x = -200, .y = -230 },
-                        {.x = 200, .y = 50 },
-                        {.x = 20, .y = 230},
-                    },
-                    {
-                        {.x = -32,   .y = -32   },
-                        {.x = 32,  .y = -32  },
-                        {.x = 20,  .y = 17 },
-                    },
-                };
-                for (size_t i = 0; i < (sizeof(triangles) / sizeof(triangles[0])); ++i)
-                {
-                    /*DrawTriangleSolid(surface->pixels,
-                        &(triangles[i][0]), &(triangles[i][1]), &(triangles[i][2]),
-                        COLOR_FOREGROUND);*/
-                    DrawTriangleShaded(surface->pixels,
-                        &(triangles[i][0]), &(triangles[i][1]), &(triangles[i][2]),
-                        0.0, 1.0, 0.5, COLOR_FOREGROUND);
-                    DrawTriangleWireframe(surface->pixels,
-                        &(triangles[i][0]), &(triangles[i][1]), &(triangles[i][2]),
-                        COLOR_WHITE);
-                }
-            }
+            //{
+            //    const Vec2Int triangles[][3] =
+            //    {
+            //        {
+            //            {.x = -200, .y = -230 },
+            //            {.x = 200, .y = 50 },
+            //            {.x = 20, .y = 230},
+            //        },
+            //        {
+            //            {.x = -32,   .y = -32   },
+            //            {.x = 32,  .y = -32  },
+            //            {.x = 20,  .y = 17 },
+            //        },
+            //    };
+            //    for (size_t i = 0; i < (sizeof(triangles) / sizeof(triangles[0])); ++i)
+            //    {
+            //        /*DrawTriangleSolid(surface->pixels,
+            //            &(triangles[i][0]), &(triangles[i][1]), &(triangles[i][2]),
+            //            COLOR_FOREGROUND);*/
+            //        DrawTriangleShaded(surface->pixels,
+            //            &(triangles[i][0]), &(triangles[i][1]), &(triangles[i][2]),
+            //            0.0, 1.0, 0.5, COLOR_FOREGROUND);
+            //        DrawTriangleWireframe(surface->pixels,
+            //            &(triangles[i][0]), &(triangles[i][1]), &(triangles[i][2]),
+            //            COLOR_WHITE);
+            //    }
+            //}
 
             /* Draw 3D cube. */
             {
-                //const Vec3 vAf = {
-                //    .x = -2,
-                //    .y = -0.5,
-                //    .z = 5
-                //};
-                //const Vec3 vBf = {
-                //    .x = -2,
-                //    .y = 0.5,
-                //    .z = 5
-                //};
-                //const Vec3 vCf = {
-                //    .x = -1,
-                //    .y = 0.5,
-                //    .z = 5
-                //};
-                //const Vec3 vDf = {
-                //    .x = -1,
-                //    .y = -0.5,
-                //    .z = 5
-                //};
+                const Vec3 vAf = {
+                    .x = -2,
+                    .y = -0.5,
+                    .z = 5
+                };
+                const Vec3 vBf = {
+                    .x = -2,
+                    .y = 0.5,
+                    .z = 5
+                };
+                const Vec3 vCf = {
+                    .x = -1,
+                    .y = 0.5,
+                    .z = 5
+                };
+                const Vec3 vDf = {
+                    .x = -1,
+                    .y = -0.5,
+                    .z = 5
+                };
 
-                //const Vec3 vAb = {
-                //    .x = -2,
-                //    .y = -0.5,
-                //    .z = 6
-                //};
-                //const Vec3 vBb = {
-                //    .x = -2,
-                //    .y = 0.5,
-                //    .z = 6
-                //};
-                //const Vec3 vCb = {
-                //    .x = -1,
-                //    .y = 0.5,
-                //    .z = 6
-                //};
-                //const Vec3 vDb = {
-                //    .x = -1,
-                //    .y = -0.5,
-                //    .z = 6
-                //};
+                const Vec3 vAb = {
+                    .x = -2,
+                    .y = -0.5,
+                    .z = 6
+                };
+                const Vec3 vBb = {
+                    .x = -2,
+                    .y = 0.5,
+                    .z = 6
+                };
+                const Vec3 vCb = {
+                    .x = -1,
+                    .y = 0.5,
+                    .z = 6
+                };
+                const Vec3 vDb = {
+                    .x = -1,
+                    .y = -0.5,
+                    .z = 6
+                };
 
-                //const Vec2Int p0 = ProjectVertex(&vAf);
-                //const Vec2Int p1 = ProjectVertex(&vBf);
-                //const Vec2Int p2 = ProjectVertex(&vCf);
-                //const Vec2Int p3 = ProjectVertex(&vDf);
-                //const Vec2Int p4 = ProjectVertex(&vAb);
-                //const Vec2Int p5 = ProjectVertex(&vAb);
-                //const Vec2Int p6 = ProjectVertex(&vAb);
-                //const Vec2Int p7 = ProjectVertex(&vAb);
+                const Vec2Int p0 = ProjectVertex(&vAf);
+                const Vec2Int p1 = ProjectVertex(&vBf);
+                const Vec2Int p2 = ProjectVertex(&vCf);
+                const Vec2Int p3 = ProjectVertex(&vDf);
+                const Vec2Int p4 = ProjectVertex(&vAb);
+                const Vec2Int p5 = ProjectVertex(&vBb);
+                const Vec2Int p6 = ProjectVertex(&vCb);
+                const Vec2Int p7 = ProjectVertex(&vDb);
 
-                //DrawLine(surface->pixels, &p0, &p1, COLOR_BLACK);
-                //DrawLine(surface->pixels, &p1, &p2, COLOR_BLACK);
-                //DrawLine(surface->pixels, &p2, &p3, COLOR_BLACK);
-                //DrawLine(surface->pixels, &p3, &p0, COLOR_BLACK);
+                DrawLine(surface->pixels, &p0, &p1, COLOR_BLACK);
+                DrawLine(surface->pixels, &p1, &p2, COLOR_BLACK);
+                DrawLine(surface->pixels, &p2, &p3, COLOR_BLACK);
+                DrawLine(surface->pixels, &p3, &p0, COLOR_BLACK);
 
-                //DrawLine(surface->pixels, &p4, &p5, COLOR_WHITE);
-                //DrawLine(surface->pixels, &p5, &p6, COLOR_WHITE);
-                //DrawLine(surface->pixels, &p6, &p7, COLOR_WHITE);
-                //DrawLine(surface->pixels, &p7, &p4, COLOR_WHITE);
+                DrawLine(surface->pixels, &p4, &p5, COLOR_WHITE);
+                DrawLine(surface->pixels, &p5, &p6, COLOR_WHITE);
+                DrawLine(surface->pixels, &p6, &p7, COLOR_WHITE);
+                DrawLine(surface->pixels, &p7, &p4, COLOR_WHITE);
 
-                //DrawLine(surface->pixels, &p0, &p4, COLOR_FOREGROUND);
-                //DrawLine(surface->pixels, &p1, &p5, COLOR_FOREGROUND);
-                //DrawLine(surface->pixels, &p2, &p6, COLOR_FOREGROUND);
-                //DrawLine(surface->pixels, &p3, &p7, COLOR_FOREGROUND);
+                DrawLine(surface->pixels, &p0, &p4, COLOR_FOREGROUND);
+                DrawLine(surface->pixels, &p1, &p5, COLOR_FOREGROUND);
+                DrawLine(surface->pixels, &p2, &p6, COLOR_FOREGROUND);
+                DrawLine(surface->pixels, &p3, &p7, COLOR_FOREGROUND);
             }
 
             SDL_Log("Scene render time: %llu milliseconds\n",

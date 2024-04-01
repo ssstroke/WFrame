@@ -299,3 +299,21 @@ void LerpDouble(const int i0, const double d0, const int i1, const double d1,
         d += a;
     }
 }
+
+Vec2Int ViewportToCanvas(const Vec2Double* p)
+{
+    const Vec2Int result = {
+        .x = p->x * WINDOW_WIDTH / VIEWPORT_WIDTH,
+        .y = p->y * WINDOW_HEIGHT / VIEWPORT_HEIGHT,
+    };
+    return result;
+}
+
+Vec2Int ProjectVertex(const Vec3* p)
+{
+    const Vec2Double projected = {
+        .x = p->x * VIEWPORT_LENGTH / p->z,
+        .y = p->y * VIEWPORT_LENGTH / p->z,
+    };
+    return ViewportToCanvas(&projected);
+}

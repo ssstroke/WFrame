@@ -47,3 +47,8 @@ typedef struct {
     int x;
     int y;
 } Vec2Int;
+
+typedef struct {
+    double x;
+    double y;
+} Vec2Double;

@@ -35,3 +35,7 @@ void DrawTriangleShaded(void* buffer,
     const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
     double h0, double h1, double h2,
     const int r, const int g, const int b);
+
+Vec2Int ViewportToCanvas(const Vec2Double* p);
+
+Vec2Int ProjectVertex(const Vec3* p);
