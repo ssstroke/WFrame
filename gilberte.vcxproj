@@ -21,12 +21,12 @@
   <ItemGroup>
     <ClInclude Include="src\gilberte.h" />
     <ClInclude Include="src\render.h" />
-    <ClInclude Include="src\vec3.h" />
+    <ClInclude Include="src\vec.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gilberte.c" />
     <ClCompile Include="src\render.c" />
-    <ClCompile Include="src\vec3.c" />
+    <ClCompile Include="src\vec.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -109,7 +109,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <ExternalTemplatesDiagnostics>
       </ExternalTemplatesDiagnostics>
@@ -137,7 +137,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <ExternalTemplatesDiagnostics>
       </ExternalTemplatesDiagnostics>
@@ -166,7 +166,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <ExternalTemplatesDiagnostics>
       </ExternalTemplatesDiagnostics>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -193,7 +193,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <ExternalTemplatesDiagnostics>
       </ExternalTemplatesDiagnostics>
