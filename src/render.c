@@ -313,7 +313,7 @@ Vec2Int ProjectVertex(const Vec3* p)
 {
     const Vec2Double projected = {
         .x = p->x * VIEWPORT_LENGTH / p->z,
-        .y = p->y * VIEWPORT_LENGTH / p->z,
+        .y = p->y * VIEWPORT_LENGTH / p->z * ((double)WINDOW_WIDTH / (double)WINDOW_HEIGHT),
     };
     return ViewportToCanvas(&projected);
 }

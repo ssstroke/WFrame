@@ -107,45 +107,45 @@ int main(int argc, char** argv)
             /* Draw 3D cube. */
             {
                 const Vec3 vAf = {
-                    .x = -2,
-                    .y = -0.5,
-                    .z = 5
+                    .x = -6,
+                    .y = -1,
+                    .z = 14
                 };
                 const Vec3 vBf = {
-                    .x = -2,
-                    .y = 0.5,
-                    .z = 5
+                    .x = -6,
+                    .y = 1,
+                    .z = 14
                 };
                 const Vec3 vCf = {
-                    .x = -1,
-                    .y = 0.5,
-                    .z = 5
+                    .x = -4,
+                    .y = 1,
+                    .z = 14
                 };
                 const Vec3 vDf = {
-                    .x = -1,
-                    .y = -0.5,
-                    .z = 5
+                    .x = -4,
+                    .y = -1,
+                    .z = 14
                 };
 
                 const Vec3 vAb = {
-                    .x = -2,
-                    .y = -0.5,
-                    .z = 6
+                    .x = -6,
+                    .y = -1,
+                    .z = 16
                 };
                 const Vec3 vBb = {
-                    .x = -2,
-                    .y = 0.5,
-                    .z = 6
+                    .x = -6,
+                    .y = 1,
+                    .z = 16
                 };
                 const Vec3 vCb = {
-                    .x = -1,
-                    .y = 0.5,
-                    .z = 6
+                    .x = -4,
+                    .y = 1,
+                    .z = 16
                 };
                 const Vec3 vDb = {
-                    .x = -1,
-                    .y = -0.5,
-                    .z = 6
+                    .x = -4,
+                    .y = -1,
+                    .z = 16
                 };
 
                 const Vec2Int p0 = ProjectVertex(&vAf);
