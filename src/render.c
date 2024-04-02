@@ -314,8 +314,8 @@ void LerpDouble(const int i0, const double d0, const int i1, const double d1,
 Vec2_Int ViewportToCanvas(const Vec2_Double* p)
 {
     const Vec2_Int result = {
-        .x = p->x * WINDOW_WIDTH / VIEWPORT_WIDTH,
-        .y = p->y * WINDOW_HEIGHT / VIEWPORT_HEIGHT,
+        .x = (int)(p->x * WINDOW_WIDTH / VIEWPORT_WIDTH),
+        .y = (int)(p->y * WINDOW_HEIGHT / VIEWPORT_HEIGHT),
     };
     return result;
 }
