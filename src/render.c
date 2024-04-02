@@ -10,19 +10,25 @@
 
 #include "gilberte.h"
 
+void* gBuffer = NULL;
+
+void SetBuffer(void* buffer)
+{
+    gBuffer = buffer;
+}
+
 void LerpInt(const int i0, const double d0, const int i1, const double d1,
     int* values);
 
 void LerpDouble(const int i0, const double d0, const int i1, const double d1,
     double* values);
 
-void DrawPoint(void* buffer,
-    const Vec2Int* p,
+void DrawPoint(const Vec2Int* p,
     const int r, const int g, const int b)
 {
     const Uint32 x = WINDOW_WIDTH / 2 + p->x;
     const Uint32 y = WINDOW_HEIGHT / 2 - p->y;
-    Uint32* pixel = (Uint32*)buffer + (y * WINDOW_WIDTH) + x;
+    Uint32* pixel = (Uint32*)gBuffer + (y * WINDOW_WIDTH) + x;
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     /*
@@ -43,7 +49,7 @@ void DrawPoint(void* buffer,
 #endif // SDL_BYTEORDER == SDL_BIG_ENDIAN
 }
 
-void DrawLine(void* buffer,
+void DrawLine(
     const Vec2Int* p0, const Vec2Int* p1,
     const int r, const int g, const int b)
 {
@@ -66,7 +72,12 @@ void DrawLine(void* buffer,
         for (int x = p0_->x; x <= p1_->x; ++x)
         {
             const Vec2Int p = { .x = x, .y = values[x - p0_->x] };
-            DrawPoint(buffer, &p, r, g, b);
+            DrawPoint(&p, r, g, b);
+            // This is so fucked up. Above function is declared as
+            // void DrawPoint(const Vec2Int* p,
+            //     const int r, const int g, const int b);
+            // I was calling it like DrawPoint(gBuffer, &p, r, g, b);
+            // and it was compiling just fine! How the fuck?
         }
     }
     else
@@ -85,21 +96,21 @@ void DrawLine(void* buffer,
         for (int y = p0_->y; y <= p1_->y; ++y)
         {
             const Vec2Int p = { .x = values[y - p0_->y], .y = y };
-            DrawPoint(buffer, &p, r, g, b);
+            DrawPoint(&p, r, g, b);
         }
     }
 }
 
-void DrawTriangleWireframe(void* buffer,
+void DrawTriangleWireframe(
     const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
     const int r, const int g, const int b)
 {
-    DrawLine(buffer, p0, p1, r, g, b);
-    DrawLine(buffer, p1, p2, r, g, b);
-    DrawLine(buffer, p2, p0, r, g, b);
+    DrawLine(p0, p1, r, g, b);
+    DrawLine(p1, p2, r, g, b);
+    DrawLine(p2, p0, r, g, b);
 }
 
-void DrawTriangleSolid(void* buffer,
+void DrawTriangleSolid(
     const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
     const int r, const int g, const int b)
 {
@@ -159,13 +170,13 @@ void DrawTriangleSolid(void* buffer,
             for (int x = x_left[y - p0_->y]; x <= x_right[y - p0_->y]; ++x)
             {
                 const Vec2Int p = { .x = x, .y = y };
-                DrawPoint(buffer, &p, r, g, b);
+                DrawPoint(&p, r, g, b);
             }
         }
     }
 }
 
-void DrawTriangleShaded(void* buffer,
+void DrawTriangleShaded(
     const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
     double h0, double h1, double h2,
     const int r, const int g, const int b)
@@ -257,7 +268,7 @@ void DrawTriangleShaded(void* buffer,
             {
                 const Vec2Int p = { .x = x, .y = y };
                 const double h_value = h_values[x - x_left[y - p0_->y]];
-                DrawPoint(buffer, &p,
+                DrawPoint(&p,
                     (int)(h_value * r), (int)(h_value * g), (int)(h_value * b));
             }
         }
