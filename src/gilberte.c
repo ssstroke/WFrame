@@ -108,7 +108,7 @@ void showoffDrawBackground()
     {
         for (int x = -(WINDOW_WIDTH / 2); x <= WINDOW_WIDTH / 2; ++x)
         {
-            const Vec2Int p = { .x = x, .y = y };
+            const Vec2_Int p = { .x = x, .y = y };
             DrawPoint(&p, COLOR_BACKGROUND);
         }
     }
@@ -116,7 +116,7 @@ void showoffDrawBackground()
 
 void showoffDrawTriangles()
 {
-    const Vec2Int triangles[][3] =
+    const Vec2_Int triangles[][3] =
     {
         {
             {.x = -200, .y = -230 },
@@ -145,54 +145,54 @@ void showoffDrawTriangles()
 
 void showoffDrawCube()
 {
-    const Vec3 vAf = {
+    const Vec3_Double vAf = {
         .x = -6,
         .y = -1,
         .z = 14
     };
-    const Vec3 vBf = {
+    const Vec3_Double vBf = {
         .x = -6,
         .y = 1,
         .z = 14
     };
-    const Vec3 vCf = {
+    const Vec3_Double vCf = {
         .x = -4,
         .y = 1,
         .z = 14
     };
-    const Vec3 vDf = {
+    const Vec3_Double vDf = {
         .x = -4,
         .y = -1,
         .z = 14
     };
-    const Vec3 vAb = {
+    const Vec3_Double vAb = {
         .x = -6,
         .y = -1,
         .z = 16
     };
-    const Vec3 vBb = {
+    const Vec3_Double vBb = {
         .x = -6,
         .y = 1,
         .z = 16
     };
-    const Vec3 vCb = {
+    const Vec3_Double vCb = {
         .x = -4,
         .y = 1,
         .z = 16
     };
-    const Vec3 vDb = {
+    const Vec3_Double vDb = {
         .x = -4,
         .y = -1,
         .z = 16
     };
-    const Vec2Int p0 = ProjectVertex(&vAf);
-    const Vec2Int p1 = ProjectVertex(&vBf);
-    const Vec2Int p2 = ProjectVertex(&vCf);
-    const Vec2Int p3 = ProjectVertex(&vDf);
-    const Vec2Int p4 = ProjectVertex(&vAb);
-    const Vec2Int p5 = ProjectVertex(&vBb);
-    const Vec2Int p6 = ProjectVertex(&vCb);
-    const Vec2Int p7 = ProjectVertex(&vDb);
+    const Vec2_Int p0 = ProjectVertex(&vAf);
+    const Vec2_Int p1 = ProjectVertex(&vBf);
+    const Vec2_Int p2 = ProjectVertex(&vCf);
+    const Vec2_Int p3 = ProjectVertex(&vDf);
+    const Vec2_Int p4 = ProjectVertex(&vAb);
+    const Vec2_Int p5 = ProjectVertex(&vBb);
+    const Vec2_Int p6 = ProjectVertex(&vCb);
+    const Vec2_Int p7 = ProjectVertex(&vDb);
     DrawLine(&p0, &p1, COLOR_BLACK);
     DrawLine(&p1, &p2, COLOR_BLACK);
     DrawLine(&p2, &p3, COLOR_BLACK);

@@ -23,7 +23,7 @@ void LerpInt(const int i0, const double d0, const int i1, const double d1,
 void LerpDouble(const int i0, const double d0, const int i1, const double d1,
     double* values);
 
-void DrawPoint(const Vec2Int* p,
+void DrawPoint(const Vec2_Int* p,
     const int r, const int g, const int b)
 {
     const Uint32 x = WINDOW_WIDTH / 2 + p->x;
@@ -50,11 +50,11 @@ void DrawPoint(const Vec2Int* p,
 }
 
 void DrawLine(
-    const Vec2Int* p0, const Vec2Int* p1,
+    const Vec2_Int* p0, const Vec2_Int* p1,
     const int r, const int g, const int b)
 {
-    const Vec2Int* p0_ = p0;
-    const Vec2Int* p1_ = p1;
+    const Vec2_Int* p0_ = p0;
+    const Vec2_Int* p1_ = p1;
 
     if (abs(p1_->x - p0_->x) > abs(p1_->y - p0_->y))
     {
@@ -71,7 +71,7 @@ void DrawLine(
         LerpInt(p0_->x, p0_->y, p1_->x, p1_->y, values);
         for (int x = p0_->x; x <= p1_->x; ++x)
         {
-            const Vec2Int p = { .x = x, .y = values[x - p0_->x] };
+            const Vec2_Int p = { .x = x, .y = values[x - p0_->x] };
             DrawPoint(&p, r, g, b);
             // This is so fucked up. Above function is declared as
             // void DrawPoint(const Vec2Int* p,
@@ -95,14 +95,14 @@ void DrawLine(
         LerpInt(p0_->y, p0_->x, p1_->y, p1_->x, values);
         for (int y = p0_->y; y <= p1_->y; ++y)
         {
-            const Vec2Int p = { .x = values[y - p0_->y], .y = y };
+            const Vec2_Int p = { .x = values[y - p0_->y], .y = y };
             DrawPoint(&p, r, g, b);
         }
     }
 }
 
 void DrawTriangleWireframe(
-    const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
+    const Vec2_Int* p0, const Vec2_Int* p1, const Vec2_Int* p2,
     const int r, const int g, const int b)
 {
     DrawLine(p0, p1, r, g, b);
@@ -111,12 +111,12 @@ void DrawTriangleWireframe(
 }
 
 void DrawTriangleSolid(
-    const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
+    const Vec2_Int* p0, const Vec2_Int* p1, const Vec2_Int* p2,
     const int r, const int g, const int b)
 {
-    const Vec2Int* p0_ = p0;
-    const Vec2Int* p1_ = p1;
-    const Vec2Int* p2_ = p2;
+    const Vec2_Int* p0_ = p0;
+    const Vec2_Int* p1_ = p1;
+    const Vec2_Int* p2_ = p2;
 
     {
         if (p1_->y < p0_->y)
@@ -128,14 +128,14 @@ void DrawTriangleSolid(
         if (p2_->y < p0_->y)
         {
             // swap p2 and p0
-            const Vec2Int* temp = p0_;
+            const Vec2_Int* temp = p0_;
             p0_ = p2_;
             p2_ = temp;
         }
         if (p2_->y < p1_->y)
         {
             // swap p2 and p1
-            const Vec2Int* temp = p1_;
+            const Vec2_Int* temp = p1_;
             p1_ = p2_;
             p2_ = temp;
         }
@@ -169,7 +169,7 @@ void DrawTriangleSolid(
         {
             for (int x = x_left[y - p0_->y]; x <= x_right[y - p0_->y]; ++x)
             {
-                const Vec2Int p = { .x = x, .y = y };
+                const Vec2_Int p = { .x = x, .y = y };
                 DrawPoint(&p, r, g, b);
             }
         }
@@ -177,13 +177,13 @@ void DrawTriangleSolid(
 }
 
 void DrawTriangleShaded(
-    const Vec2Int* p0, const Vec2Int* p1, const Vec2Int* p2,
+    const Vec2_Int* p0, const Vec2_Int* p1, const Vec2_Int* p2,
     double h0, double h1, double h2,
     const int r, const int g, const int b)
 {
-    const Vec2Int* p0_ = p0;
-    const Vec2Int* p1_ = p1;
-    const Vec2Int* p2_ = p2;
+    const Vec2_Int* p0_ = p0;
+    const Vec2_Int* p1_ = p1;
+    const Vec2_Int* p2_ = p2;
 
     {
         if (p1_->y < p0_->y)
@@ -197,7 +197,7 @@ void DrawTriangleShaded(
         }
         if (p2_->y < p0_->y)
         {
-            const Vec2Int* temp = p0_;
+            const Vec2_Int* temp = p0_;
             p0_ = p2_;
             p2_ = temp;
 
@@ -207,7 +207,7 @@ void DrawTriangleShaded(
         }
         if (p2_->y < p1_->y)
         {
-            const Vec2Int* temp = p1_;
+            const Vec2_Int* temp = p1_;
             p1_ = p2_;
             p2_ = temp;
 
@@ -266,7 +266,7 @@ void DrawTriangleShaded(
 
             for (int x = x_left[y - p0_->y]; x <= x_right[y - p0_->y]; ++x)
             {
-                const Vec2Int p = { .x = x, .y = y };
+                const Vec2_Int p = { .x = x, .y = y };
                 const double h_value = h_values[x - x_left[y - p0_->y]];
                 DrawPoint(&p,
                     (int)(h_value * r), (int)(h_value * g), (int)(h_value * b));
@@ -311,18 +311,18 @@ void LerpDouble(const int i0, const double d0, const int i1, const double d1,
     }
 }
 
-Vec2Int ViewportToCanvas(const Vec2Double* p)
+Vec2_Int ViewportToCanvas(const Vec2_Double* p)
 {
-    const Vec2Int result = {
+    const Vec2_Int result = {
         .x = p->x * WINDOW_WIDTH / VIEWPORT_WIDTH,
         .y = p->y * WINDOW_HEIGHT / VIEWPORT_HEIGHT,
     };
     return result;
 }
 
-Vec2Int ProjectVertex(const Vec3* p)
+Vec2_Int ProjectVertex(const Vec3_Double* p)
 {
-    const Vec2Double projected = {
+    const Vec2_Double projected = {
         .x = p->x * VIEWPORT_LENGTH / p->z,
         .y = p->y * VIEWPORT_LENGTH / p->z * ((double)WINDOW_WIDTH / (double)WINDOW_HEIGHT),
     };
