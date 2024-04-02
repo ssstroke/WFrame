@@ -44,6 +44,8 @@ int main(int argc, char** argv)
             exit_code = kErrorInitialization;
             goto Exit;
         }
+
+        SetBuffer(surface->pixels);
     }
 
     while (true)
@@ -71,7 +73,7 @@ int main(int argc, char** argv)
                 for (int x = -(WINDOW_WIDTH / 2); x <= WINDOW_WIDTH / 2; ++x)
                 {
                     const Vec2Int p = { .x = x, .y = y };
-                    DrawPoint(surface->pixels, &p, COLOR_BACKGROUND);
+                    DrawPoint(&p, COLOR_BACKGROUND);
                 }
             }
 
@@ -95,10 +97,10 @@ int main(int argc, char** argv)
             //        /*DrawTriangleSolid(surface->pixels,
             //            &(triangles[i][0]), &(triangles[i][1]), &(triangles[i][2]),
             //            COLOR_FOREGROUND);*/
-            //        DrawTriangleShaded(surface->pixels,
+            //        DrawTriangleShaded(
             //            &(triangles[i][0]), &(triangles[i][1]), &(triangles[i][2]),
             //            0.0, 1.0, 0.5, COLOR_FOREGROUND);
-            //        DrawTriangleWireframe(surface->pixels,
+            //        DrawTriangleWireframe(
             //            &(triangles[i][0]), &(triangles[i][1]), &(triangles[i][2]),
             //            COLOR_WHITE);
             //    }
@@ -126,7 +128,6 @@ int main(int argc, char** argv)
                     .y = -1,
                     .z = 14
                 };
-
                 const Vec3 vAb = {
                     .x = -6,
                     .y = -1,
@@ -147,7 +148,6 @@ int main(int argc, char** argv)
                     .y = -1,
                     .z = 16
                 };
-
                 const Vec2Int p0 = ProjectVertex(&vAf);
                 const Vec2Int p1 = ProjectVertex(&vBf);
                 const Vec2Int p2 = ProjectVertex(&vCf);
@@ -156,21 +156,18 @@ int main(int argc, char** argv)
                 const Vec2Int p5 = ProjectVertex(&vBb);
                 const Vec2Int p6 = ProjectVertex(&vCb);
                 const Vec2Int p7 = ProjectVertex(&vDb);
-
-                DrawLine(surface->pixels, &p0, &p1, COLOR_BLACK);
-                DrawLine(surface->pixels, &p1, &p2, COLOR_BLACK);
-                DrawLine(surface->pixels, &p2, &p3, COLOR_BLACK);
-                DrawLine(surface->pixels, &p3, &p0, COLOR_BLACK);
-
-                DrawLine(surface->pixels, &p4, &p5, COLOR_WHITE);
-                DrawLine(surface->pixels, &p5, &p6, COLOR_WHITE);
-                DrawLine(surface->pixels, &p6, &p7, COLOR_WHITE);
-                DrawLine(surface->pixels, &p7, &p4, COLOR_WHITE);
-
-                DrawLine(surface->pixels, &p0, &p4, COLOR_FOREGROUND);
-                DrawLine(surface->pixels, &p1, &p5, COLOR_FOREGROUND);
-                DrawLine(surface->pixels, &p2, &p6, COLOR_FOREGROUND);
-                DrawLine(surface->pixels, &p3, &p7, COLOR_FOREGROUND);
+                DrawLine(&p0, &p1, COLOR_BLACK);
+                DrawLine(&p1, &p2, COLOR_BLACK);
+                DrawLine(&p2, &p3, COLOR_BLACK);
+                DrawLine(&p3, &p0, COLOR_BLACK);
+                DrawLine(&p4, &p5, COLOR_WHITE);
+                DrawLine(&p5, &p6, COLOR_WHITE);
+                DrawLine(&p6, &p7, COLOR_WHITE);
+                DrawLine(&p7, &p4, COLOR_WHITE);
+                DrawLine(&p0, &p4, COLOR_FOREGROUND);
+                DrawLine(&p1, &p5, COLOR_FOREGROUND);
+                DrawLine(&p2, &p6, COLOR_FOREGROUND);
+                DrawLine(&p3, &p7, COLOR_FOREGROUND);
             }
 
             SDL_Log("Scene render time: %llu milliseconds\n",
@@ -183,8 +180,8 @@ int main(int argc, char** argv)
         SDL_Delay((Uint32)(1.0 / TARGET_FRAME_RATE * 1000));
     }
 
-    {
 Exit:
+    {
         SDL_FreeSurface(surface);
         surface = NULL;
 
