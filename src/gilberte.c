@@ -5,12 +5,13 @@
 
 #include <SDL.h>
 
+#include "mesh.h"
 #include "render.h"
 #include "vec.h"
 
-void showoffDrawBackground();
-void showoffDrawTriangles();
-void showoffDrawCube();
+void showoffDrawBackground(void);
+void showoffDrawTriangles(void);
+void showoffDrawCube(void);
 
 int main(int argc, char** argv)
 {
@@ -52,6 +53,9 @@ int main(int argc, char** argv)
         SetBuffer(surface->pixels);
     }
 
+    Mesh* mesh = MeshLoadFromObj("assets/triangle_plane.obj");
+    MeshFree(mesh);
+
     while (true)
     {
         /* Input processing. */
@@ -72,7 +76,6 @@ int main(int argc, char** argv)
             const Uint64 kBegin = SDL_GetTicks64();
 
             showoffDrawBackground();
-            
             showoffDrawTriangles();
             showoffDrawCube();
 
@@ -102,7 +105,7 @@ Exit:
     }
 }
 
-void showoffDrawBackground()
+void showoffDrawBackground(void)
 {
     for (int y = (WINDOW_HEIGHT / 2); y >= -(WINDOW_HEIGHT / 2); --y)
     {
@@ -114,7 +117,7 @@ void showoffDrawBackground()
     }
 }
 
-void showoffDrawTriangles()
+void showoffDrawTriangles(void)
 {
     const Vec2_Int triangles[][3] =
     {
@@ -143,7 +146,7 @@ void showoffDrawTriangles()
     }
 }
 
-void showoffDrawCube()
+void showoffDrawCube(void)
 {
     const Vec3_Double vAf = {
         .x = -6,
