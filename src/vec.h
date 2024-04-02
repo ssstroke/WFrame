@@ -1,5 +1,8 @@
 #pragma once
 
+// I want Uint32.
+#include <SDL.h>
+
 typedef struct {
     int x;
     int y;
@@ -15,6 +18,12 @@ typedef struct {
     int y;
     int z;
 } Vec3_Int;
+
+typedef struct {
+    Uint32 x;
+    Uint32 y;
+    Uint32 z;
+} Vec3_Uint;
 
 typedef struct {
     double x;
