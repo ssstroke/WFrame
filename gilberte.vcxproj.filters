@@ -24,6 +24,9 @@
     <ClCompile Include="src\vec.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\mesh.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gilberte.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\vec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
