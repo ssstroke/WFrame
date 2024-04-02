@@ -1,4 +1,3 @@
-// TODO: Why pass buffer if there is only one buffer?
 // TODO: Do I really need two separate Lerp functions?
 // TODO: Swap in a separate function.
 // TODO: Review array sizes for `x012`, `x02`, `h012`, `h02`
