@@ -53,8 +53,7 @@ int main(int argc, char** argv)
         SetBuffer(surface->pixels);
     }
 
-    Mesh* mesh = MeshLoadFromObj("assets/triangle_plane.obj");
-    MeshFree(mesh);
+    Mesh* mesh = MeshLoadFromObj("assets/monkey_upper_left.obj");
 
     while (true)
     {
@@ -76,8 +75,7 @@ int main(int argc, char** argv)
             const Uint64 kBegin = SDL_GetTicks64();
 
             showoffDrawBackground();
-            showoffDrawTriangles();
-            showoffDrawCube();
+            RenderMesh(mesh);
 
             SDL_Log("Scene render time: %llu milliseconds\n",
                     SDL_GetTicks64() - kBegin);
@@ -88,6 +86,8 @@ int main(int argc, char** argv)
 
         SDL_Delay((Uint32)(1.0 / TARGET_FRAME_RATE * 1000));
     }
+
+    MeshFree(mesh);
 
 Exit:
     {

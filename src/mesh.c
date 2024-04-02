@@ -1,5 +1,3 @@
-// TODO: Check for memory leaks.
-
 #include "mesh.h"
 
 #include <SDL.h>
@@ -8,6 +6,9 @@
 #include <stdio.h>
 #include <string.h>
 
+// TODO: Check for memory leaks.
+// TODO: Count lines that start with 'v' and 'f'
+//       and allocate memory just once.
 Mesh* MeshLoadFromObj(const char* filename)
 {
     Mesh* mesh = NULL;
@@ -37,9 +38,9 @@ Mesh* MeshLoadFromObj(const char* filename)
         {
             mesh->vertices = NULL;
             mesh->triangles = NULL;
+            mesh->triangles_count = 0;
 
-            size_t vertex_count = 0;
-            size_t triangles_count = 0;
+            size_t vertices_count = 0;
 
             char line[128];
             while (fgets(line, sizeof(line), file))
@@ -48,7 +49,7 @@ Mesh* MeshLoadFromObj(const char* filename)
                 {
                     Vec3_Double* previous_vertices = mesh->vertices;
                     mesh->vertices = (Vec3_Double*)realloc(mesh->vertices,
-                        (vertex_count + 1) * sizeof(Vec3_Double));
+                        (vertices_count + 1) * sizeof(Vec3_Double));
 
                     if (mesh->vertices == NULL)
                     {
@@ -63,22 +64,22 @@ Mesh* MeshLoadFromObj(const char* filename)
                     else
                     {
                         sscanf_s(line, "v %lf %lf %lf",
-                            &((mesh->vertices + vertex_count)->x),
-                            &((mesh->vertices + vertex_count)->y), 
-                            &((mesh->vertices + vertex_count)->z));
+                            &((mesh->vertices + vertices_count)->x),
+                            &((mesh->vertices + vertices_count)->y), 
+                            &((mesh->vertices + vertices_count)->z));
 
                         // .obj files I load come from Blender, where positive X goes to the left
                         // (although in editor it shows positive X to the right... idk.)
-                        (mesh->vertices + vertex_count)->x *= -1;
+                        (mesh->vertices + vertices_count)->x *= -1;
 
-                        ++vertex_count;
+                        ++vertices_count;
                     }
                 }
                 else if (line[0] == 'f')
                 {
                     Vec3_Uint* previous_triangles = mesh->triangles;
                     mesh->triangles = (Vec3_Uint*)realloc(mesh->triangles,
-                        (triangles_count + 1) * sizeof(Vec3_Uint));
+                        (mesh->triangles_count + 1) * sizeof(Vec3_Uint));
 
                     if (mesh->triangles == NULL)
                     {
@@ -93,13 +94,13 @@ Mesh* MeshLoadFromObj(const char* filename)
                     else
                     {
                         sscanf_s(line, "f %d %d %d",
-                            &((mesh->triangles + triangles_count)->x),
-                            &((mesh->triangles + triangles_count)->y),
-                            &((mesh->triangles + triangles_count)->z));
-                        --(mesh->triangles + triangles_count)->x;
-                        --(mesh->triangles + triangles_count)->y;
-                        --(mesh->triangles + triangles_count)->z;
-                        ++triangles_count;
+                            &((mesh->triangles + mesh->triangles_count)->x),
+                            &((mesh->triangles + mesh->triangles_count)->y),
+                            &((mesh->triangles + mesh->triangles_count)->z));
+                        --(mesh->triangles + mesh->triangles_count)->x;
+                        --(mesh->triangles + mesh->triangles_count)->y;
+                        --(mesh->triangles + mesh->triangles_count)->z;
+                        ++mesh->triangles_count;
                     }
                 }
             }

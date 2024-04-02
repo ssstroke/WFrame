@@ -8,8 +8,9 @@
 * 
 * - `triangles` is a pointer to Vec3_Int elements, each one representing three indices
 *   of `vertices` array, i.e. one element represents a three points of a triangle,
-*   e.g. [ (0, 1, 2), (0, 2, 3), (4, 0, 3), ... ]
+*   e.g. [ (0, 1, 2), (0, 2, 3), (4, 0, 3), ... ].
 *    
+*  - `triangles_count` is a number of `triangles`.
 */
 typedef struct {
     Vec3_Double* vertices;

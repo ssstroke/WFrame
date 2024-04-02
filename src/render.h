@@ -1,5 +1,6 @@
 #pragma once
 
+#include "mesh.h"
 #include "vec.h"
 
 void SetBuffer(void* buffer);
@@ -27,3 +28,5 @@ void DrawTriangleShaded(
 Vec2_Int ViewportToCanvas(const Vec2_Double* p);
 
 Vec2_Int ProjectVertex(const Vec3_Double* p);
+
+void RenderMesh(const Mesh*);

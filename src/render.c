@@ -327,3 +327,23 @@ Vec2_Int ProjectVertex(const Vec3_Double* p)
     };
     return ViewportToCanvas(&projected);
 }
+
+void RenderMesh(const Mesh* mesh)
+{
+    //  For every triangle {
+    //      Project it's three vertices
+    //      Draw triangle out of projected vertices
+    //  }
+
+    for (size_t i = 0; i < mesh->triangles_count; ++i)
+    {
+        // x, y, z of `mesh->triangles[i]` are just
+        // 3 indices of 3 vertices of 1 triangle.
+        const Vec2_Int projected_A = ProjectVertex(&(mesh->vertices[mesh->triangles[i].x]));
+        const Vec2_Int projected_B = ProjectVertex(&(mesh->vertices[mesh->triangles[i].y]));
+        const Vec2_Int projected_C = ProjectVertex(&(mesh->vertices[mesh->triangles[i].z]));
+        
+        DrawTriangleWireframe(&projected_A, &projected_B, &projected_C,
+            COLOR_FOREGROUND);
+    }
+}
