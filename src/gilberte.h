@@ -12,8 +12,8 @@
 #define COLOR_BLACK         0, 0, 0
 #define COLOR_WHITE         255, 255, 255
 
-#define COLOR_BACKGROUND    191,  49, 0
-#define COLOR_FOREGROUND    142, 166, 4
+#define COLOR_BACKGROUND    0x27, 0x29, 0x32
+#define COLOR_FOREGROUND    0x4D, 0x7E, 0xA8
 
 typedef enum {
     kErrorOk,
