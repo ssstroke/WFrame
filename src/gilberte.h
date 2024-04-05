@@ -9,8 +9,8 @@
 #define VIEWPORT_HEIGHT     1
 #define VIEWPORT_LENGTH     1
 
-#define COLOR_BLACK         0, 0, 0
-#define COLOR_WHITE         255, 255, 255
+#define COLOR_BLACK         0x00, 0x00, 0x00
+#define COLOR_WHITE         0xFF, 0xFF, 0xFF
 
 #define COLOR_BACKGROUND    0x27, 0x29, 0x32
 #define COLOR_FOREGROUND    0x4D, 0x7E, 0xA8
