@@ -56,10 +56,18 @@ int main(int argc, char** argv)
 
     Mesh* mesh_cube = MeshLoadFromObj("assets/cube_1x1_centered.obj");
 
-    Object cube = {
-        .mesh = mesh_cube,
-        .name = "cube",
-        .position = {.x = 0, .y = 0, .z = 8} };
+    Object objects[] = {
+        {
+            .mesh = mesh_cube,
+            .name = "cube",
+            .position = {.x = -4, .y = 3.2, .z = 14}
+        },
+        {
+            .mesh = mesh_cube,
+            .name = "cube",
+            .position = {.x = 2, .y = -1.2, .z = 8}
+        },
+    };
 
     while (true)
     {
@@ -81,7 +89,11 @@ int main(int argc, char** argv)
             const Uint64 kBegin = SDL_GetTicks64();
 
             showoffDrawBackground();
-            RenderObject(&cube);
+            
+            for (size_t i = 0; i < sizeof(objects) / sizeof(Object); ++i)
+            {
+                RenderObject(&(objects[i]));
+            }
 
             SDL_Log("Scene render time: %llu milliseconds\n",
                     SDL_GetTicks64() - kBegin);
