@@ -19,12 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\game_object.h" />
     <ClInclude Include="src\gilberte.h" />
     <ClInclude Include="src\mesh.h" />
     <ClInclude Include="src\render.h" />
     <ClInclude Include="src\vec.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\game_object.c" />
     <ClCompile Include="src\gilberte.c" />
     <ClCompile Include="src\mesh.c" />
     <ClCompile Include="src\render.c" />
