@@ -5,6 +5,7 @@
 
 #include <SDL.h>
 
+#include "game_object.h"
 #include "mesh.h"
 #include "render.h"
 #include "vec.h"
@@ -53,7 +54,12 @@ int main(int argc, char** argv)
         SetBuffer(surface->pixels);
     }
 
-    Mesh* mesh = MeshLoadFromObj("assets/monkey_upper_left.obj");
+    Mesh* mesh_cube = MeshLoadFromObj("assets/cube_1x1_centered.obj");
+
+    Object cube = {
+        .mesh = mesh_cube,
+        .name = "cube",
+        .position = {.x = 0, .y = 0, .z = 8} };
 
     while (true)
     {
@@ -75,7 +81,7 @@ int main(int argc, char** argv)
             const Uint64 kBegin = SDL_GetTicks64();
 
             showoffDrawBackground();
-            RenderMesh(mesh);
+            RenderObject(&cube);
 
             SDL_Log("Scene render time: %llu milliseconds\n",
                     SDL_GetTicks64() - kBegin);
@@ -87,7 +93,7 @@ int main(int argc, char** argv)
         SDL_Delay((Uint32)(1.0 / TARGET_FRAME_RATE * 1000));
     }
 
-    MeshFree(mesh);
+    MeshFree(mesh_cube);
 
 Exit:
     {
