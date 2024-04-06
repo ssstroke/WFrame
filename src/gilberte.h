@@ -1,7 +1,7 @@
 #pragma once
 
-#define WINDOW_WIDTH        800
-#define WINDOW_HEIGHT       600
+#define WINDOW_WIDTH        1024
+#define WINDOW_HEIGHT       768
 
 #define TARGET_FRAME_RATE   24  // 24 feels so much better when I listen to this: https://youtu.be/mPYBnlMafS0
 
