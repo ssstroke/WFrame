@@ -90,8 +90,9 @@ Vec3_Double Vec3CrossProduct(const Vec3_Double* a, const Vec3_Double* b)
 /* ( a.x / length(a), a.y / length(a), a.z / length(a) ) */
 Vec3_Double Vec3Normalize(const Vec3_Double* a)
 {
-    const Vec3_Double kResult = { .x = a->x / Vec3Length(a),
-                           .y = a->z / Vec3Length(a),
-                           .z = a->x / Vec3Length(a) };
+    const double len_inverse = 1.0 / Vec3Length(a);
+    const Vec3_Double kResult = { .x = a->x * len_inverse,
+                           .y = a->y * len_inverse,
+                           .z = a->z * len_inverse };
     return kResult;
 }
