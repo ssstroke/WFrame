@@ -6,9 +6,20 @@
 #include <stdio.h>
 #include <string.h>
 
-// TODO: Check for memory leaks.
-// TODO: Count lines that start with 'v' and 'f'
-//       and allocate memory just once.
+/*
+v 0.000000 3.555570 0.831470
+v 0.000000 3.831470 0.555570
+v 0.000000 3.980785 0.195090
+v 0.000000 4.000000 0.000000
+...
+...
+...
+f 479 19 480
+f 477 11 12
+f 480 20 481
+f 477 13 3
+*/
+
 Mesh* MeshLoadFromObj(const char* filename)
 {
     Mesh* mesh = NULL;
@@ -27,7 +38,7 @@ Mesh* MeshLoadFromObj(const char* filename)
     }
     else
     {
-        mesh = (Mesh*)malloc(sizeof(Mesh));
+        mesh = SDL_calloc(1, sizeof(Mesh));
 
         if (mesh == NULL)
         {
@@ -36,77 +47,71 @@ Mesh* MeshLoadFromObj(const char* filename)
         }
         else
         {
-            mesh->vertices = NULL;
-            mesh->triangles = NULL;
-            mesh->triangles_count = 0;
-
-            size_t vertices_count = 0;
+            size_t vertex_count = 0;
+            size_t triangle_count = 0;
 
             char line[128];
             while (fgets(line, sizeof(line), file))
             {
                 if (line[0] == 'v')
                 {
-                    Vec3_Double* previous_vertices = mesh->vertices;
-                    mesh->vertices = (Vec3_Double*)realloc(mesh->vertices,
-                        (vertices_count + 1) * sizeof(Vec3_Double));
-
-                    if (mesh->vertices == NULL)
-                    {
-                        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Memory allocation failed for `%s`\n",
-                            filename);
-
-                        free(previous_vertices);
-                        MeshFree(mesh);
-                        
-                        break;
-                    }
-                    else
-                    {
-                        sscanf_s(line, "v %lf %lf %lf",
-                            &((mesh->vertices + vertices_count)->x),
-                            &((mesh->vertices + vertices_count)->y), 
-                            &((mesh->vertices + vertices_count)->z));
-
-                        // .obj files I load come from Blender, where positive X goes to the left
-                        // (although in editor it shows positive X to the right... idk.)
-                        (mesh->vertices + vertices_count)->x *= -1;
-
-                        ++vertices_count;
-                    }
+                    do ++vertex_count;
+                    while (fgets(line, sizeof(line), file) && line[0] == 'v');
                 }
-                else if (line[0] == 'f')
+                if (line[0] == 'f')
                 {
-                    Vec3_Uint* previous_triangles = mesh->triangles;
-                    mesh->triangles = (Vec3_Uint*)realloc(mesh->triangles,
-                        (mesh->triangles_count + 1) * sizeof(Vec3_Uint));
+                    do ++triangle_count;
+                    while (fgets(line, sizeof(line), file) && line[0] == 'f');
+                }
+            }
 
-                    if (mesh->triangles == NULL)
+            mesh->vertices = SDL_malloc(sizeof(Vec3_Double) * vertex_count);
+            mesh->triangles = SDL_malloc(sizeof(Vec3_Uint) * triangle_count);
+            mesh->triangles_count = triangle_count;
+
+            if (mesh->vertices == NULL || mesh->triangles == NULL)
+            {
+                SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Memory allocation failed for `%s`\n",
+                    filename);
+                MeshFree(mesh);
+            }
+            else
+            {
+                rewind(file);
+
+                while (fgets(line, sizeof(line), file))
+                {
+                    if (line[0] == 'v')
                     {
-                        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Memory allocation failed for `%s`\n",
-                            filename);
-
-                        free(previous_triangles);
-                        MeshFree(mesh);
-
-                        break;
+                        for (size_t i = 0; i < vertex_count; ++i)
+                        {
+                            sscanf_s(line, "v %lf %lf %lf",
+                                &(mesh->vertices[i].x),
+                                &(mesh->vertices[i].y),
+                                &(mesh->vertices[i].z));
+                            fgets(line, sizeof(line), file);
+                        }
                     }
-                    else
+                    if (line[0] == 'f')
                     {
-                        sscanf_s(line, "f %d %d %d",
-                            &((mesh->triangles + mesh->triangles_count)->x),
-                            &((mesh->triangles + mesh->triangles_count)->y),
-                            &((mesh->triangles + mesh->triangles_count)->z));
-                        --(mesh->triangles + mesh->triangles_count)->x;
-                        --(mesh->triangles + mesh->triangles_count)->y;
-                        --(mesh->triangles + mesh->triangles_count)->z;
-                        ++mesh->triangles_count;
+                        for (size_t i = 0; i < triangle_count; ++i)
+                        {
+                            sscanf_s(line, "f %lu %lu %lu",
+                                &(mesh->triangles[i].x),
+                                &(mesh->triangles[i].y),
+                                &(mesh->triangles[i].z));
+
+                            // Account for 1-based indexing is .obj files.
+                            --mesh->triangles[i].x;
+                            --mesh->triangles[i].y;
+                            --mesh->triangles[i].z;
+
+                            fgets(line, sizeof(line), file);
+                        }
                     }
                 }
             }
         }
-
-        fclose(file);
     }
 
     return mesh;

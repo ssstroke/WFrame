@@ -54,18 +54,13 @@ int main(int argc, char** argv)
         SetBuffer(surface->pixels);
     }
 
-    Mesh* mesh_cube = MeshLoadFromObj("assets/cube_1x1_centered.obj");
+    Mesh* mesh = MeshLoadFromObj("assets/sphere_d1.obj");
 
     Object objects[] = {
         {
-            .mesh = mesh_cube,
-            .name = "cube",
-            .position = {.x = -4, .y = 3.2, .z = 14}
-        },
-        {
-            .mesh = mesh_cube,
-            .name = "cube",
-            .position = {.x = 2, .y = -1.2, .z = 8}
+            .mesh = mesh,
+            .name = "sphere",
+            .position = {.x = 0, .y = 0, .z = 0}
         },
     };
 
@@ -105,7 +100,7 @@ int main(int argc, char** argv)
         SDL_Delay((Uint32)(1.0 / TARGET_FRAME_RATE * 1000));
     }
 
-    MeshFree(mesh_cube);
+    MeshFree(mesh);
 
 Exit:
     {
