@@ -40,6 +40,7 @@ void DrawPoint(const Vec2_Int* p,
     }
 }
 
+// TODO: It fucks up the stack.
 void DrawLine(
     const Vec2_Int* p0, const Vec2_Int* p1,
     const int r, const int g, const int b)
