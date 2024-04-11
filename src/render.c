@@ -27,25 +27,17 @@ void DrawPoint(const Vec2_Int* p,
 {
     const Uint32 x = WINDOW_WIDTH / 2 + p->x;
     const Uint32 y = WINDOW_HEIGHT / 2 - p->y;
-    Uint32* pixel = (Uint32*)gBuffer + (y * WINDOW_WIDTH) + x;
+
+    if (x < WINDOW_WIDTH && y < WINDOW_HEIGHT)
+    {
+        Uint32* pixel = (Uint32*)gBuffer + (y * WINDOW_WIDTH) + x;
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    /*
-    * Byte order: 4321
-    * 
-    * 0000 0000     0000 0000     0000 0000     0000 0000
-    * { unused }    { b_channel } { g_channel } { r_channel }
-    */
-    *pixel = (r << 24) | (g << 16) | (b << 8) | 0xFF;
+        *pixel = (r << 24) | (g << 16) | (b << 8) | 0xFF;
 #else
-    /*
-    * Byte order: 1234
-    * 
-    * 0000 0000     0000 0000     0000 0000     0000 0000
-    * { r_channel } { g_channel } { b_channel } { unused }
-    */
-    *pixel = (r) | (g << 8) | (b << 16) | (0xFF << 24);
+        *pixel = (r) | (g << 8) | (b << 16) | (0xFF << 24);
 #endif // SDL_BYTEORDER == SDL_BIG_ENDIAN
+    }
 }
 
 void DrawLine(
