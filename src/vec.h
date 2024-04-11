@@ -52,9 +52,6 @@ Vec3_Double Vec3DivScalar(const Vec3_Double*, double);
 /* sqrt(x * x + y * y + z * z) */
 double Vec3Length(const Vec3_Double*);
 
-/* (x * x) + (y * y) + (z * z) */
-double Vec3LengthSquared(const Vec3_Double*);
-
 /* (a.x * b.x) + (a.y * b.y) + (a.z * b.z) */
 double Vec3DotProduct(const Vec3_Double*, const Vec3_Double*);
 

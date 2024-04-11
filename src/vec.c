@@ -1,6 +1,6 @@
 #include "vec.h"
 
-#include <math.h>
+#include <SDL.h>
 
 /* (a, b, c) + (d, e, f) = (a + d, b + e, c + f) */
 Vec3_Double Vec3Add(const Vec3_Double* a, const Vec3_Double* b)
@@ -50,22 +50,17 @@ Vec3_Double Vec3MulScalar(const Vec3_Double* a, double k)
 /* (a, b, c) / k = (a / k, b / k, c / k) */
 Vec3_Double Vec3DivScalar(const Vec3_Double* a, double k)
 {
-    const Vec3_Double kResult = { .x = a->x / k,
-                           .y = a->y / k,
-                           .z = a->z / k };
+    const double inverse_k = 1.0 / k;
+    const Vec3_Double kResult = { .x = a->x * inverse_k,
+                           .y = a->y * inverse_k,
+                           .z = a->z * inverse_k };
     return kResult;
 }
 
 /* sqrt(x * x + y * y + z * z) */
 double Vec3Length(const Vec3_Double* a)
 {
-    return sqrt(a->x * a->x + a->y * a->y + a->z * a->z);
-}
-
-/* x * x + y * y + z * z */
-double Vec3LengthSquared(const Vec3_Double* a)
-{
-    return a->x * a->x + a->y * a->y + a->z * a->z;
+    return SDL_sqrt(Vec3DotProduct(a, a));
 }
 
 /* a.x * b.x + a.y * b.y + a.z * b.z */
