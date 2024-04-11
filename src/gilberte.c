@@ -52,13 +52,13 @@ int main(int argc, char** argv)
         SetBuffer(surface->pixels);
     }
 
-    Mesh* mesh = MeshLoadFromObj("assets/sphere_d1.obj");
+    Mesh* mesh = MeshLoadFromObj("assets/monkey.obj");
 
     Object objects[] = {
         {
             .mesh = mesh,
             .name = "test",
-            .position = {.x = 0, .y = 0, .z = 0}
+            .position = {.x = 0, .y = 3, .z = 0}
         },
     };
 
@@ -79,27 +79,27 @@ int main(int argc, char** argv)
                     {
                         if (event.key.keysym.sym == SDLK_UP)
                         {
-                            objects[0].position.z += 0.5;
+                            objects[0].position.z += 0.1;
                         }
                         else if (event.key.keysym.sym == SDLK_DOWN)
                         {
-                            objects[0].position.z -= 0.5;
+                            objects[0].position.z -= 0.1;
                         }
                         else if (event.key.keysym.sym == SDLK_LEFT)
                         {
-                            objects[0].position.x -= 0.5;
+                            objects[0].position.x -= 0.1;
                         }
                         else if (event.key.keysym.sym == SDLK_RIGHT)
                         {
-                            objects[0].position.x += 0.5;
+                            objects[0].position.x += 0.1;
                         }
                         else if (event.key.keysym.sym == SDLK_a)
                         {
-                            objects[0].position.y += 0.5;
+                            objects[0].position.y += 0.1;
                         }
                         else if (event.key.keysym.sym == SDLK_z)
                         {
-                            objects[0].position.y -= 0.5;
+                            objects[0].position.y -= 0.1;
                         }
                         else if (event.key.keysym.sym == SDLK_q)
                         {
